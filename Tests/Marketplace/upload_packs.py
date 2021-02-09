@@ -71,7 +71,10 @@ def extract_packs_artifacts(packs_artifacts_path: str, extract_destination_path:
 
     """
     with ZipFile(packs_artifacts_path) as packs_artifacts:
+        logging.warning(f'Extracting the following files from {packs_artifacts_path} into {extract_destination_path}:\n {packs_artifacts.printdir()}')
         packs_artifacts.extractall(extract_destination_path)
+    extracted_files = glob.glob(f"{extract_destination_path}/**", recursive=True)
+    logging.warning(f'Finished extracting the following artifacts: {extracted_files}')
     logging.info("Finished extracting packs artifacts")
 
 
