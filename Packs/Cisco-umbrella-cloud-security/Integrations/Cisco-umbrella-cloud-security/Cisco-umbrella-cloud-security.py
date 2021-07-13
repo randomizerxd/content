@@ -37,13 +37,13 @@ def get_destination_lists(client: Client, **args) -> CommandResults:
     for destination_list in r['data']:
         data.append(
             {
-                'Name': destination_list['name'],
-                'ID': destination_list['id']
+                'name': destination_list['name'],
+                'id': destination_list['id']
             }
         )
     results = CommandResults(
         outputs_prefix="Umbrella.DestinationLists",
-        outputs_key_field="",
+        outputs_key_field="id",
         outputs=data
     )
 
