@@ -102,7 +102,7 @@ def get_destination_domain(client: Client, **args) -> CommandResults:
             destination_domain = destination
 
     results = CommandResults(
-        outputs_prefix="Umbrella.Destination",
+        outputs_prefix="Umbrella.Destinations",
         outputs_key_field="id",
         outputs=destination_domain,
         readable_output=tableToMarkdown('Domain in Destination List', destination_domain)
