@@ -1778,7 +1778,7 @@ def test_credentials_command(SERVER_IP):
         server_ip=SERVER_IP,
         username=username,
         password=args.get('password'),
-        ntlm_connection=argToBoolean(args.get('ntlm')),
+        ntlm_connection=argToBoolean(demisto.params().get('ntlm')),
         auto_bind=True,
     ):
         connection.unbind()
