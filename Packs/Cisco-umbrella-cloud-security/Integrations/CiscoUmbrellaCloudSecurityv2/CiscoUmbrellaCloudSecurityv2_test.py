@@ -418,3 +418,45 @@ def test_delete_destination_list_command(requests_mock, mock_client):
 
     assert command_results.readable_output == expected_readable_output
     assert command_results.raw_response == response
+
+def test_get_destination_list_command_results(requests_mock, mock_client):
+    """
+    Scenario:
+    - Test get the destination list command results
+
+    Given:
+    - A destination list ID
+
+    When:
+    - get_destination_list_command_results
+
+    Then:
+    - Ensure that the CommandResults is correct.
+    """
+    args = {
+        'destination_list_id': '12345',
+    }
+    response = load_mock_response('destination_list.json')
+    url = CommonServerPython.urljoin(DESTINATION_ENDPOINT, args['destination_list_id'])
+    requests_mock.get(url=url, json=response)
+
+    outputs, raw_response = None, CiscoUmbrellaCloudSecurityv2.get_destination_list(mock_client, args['destination_list_id'])
+    command_results: CommonServerPython.CommandResults = CiscoUmbrellaCloudSecurityv2.get_destination_list_command_results(
+        outputs=outputs or raw_response.get('data'),
+        raw_response=raw_response,
+    )
+
+    expected_readable_output = tableToMarkdown(
+        name='Destination List:',
+        t=get_json_table(outputs, CiscoUmbrellaCloudSecurityv2.DESTINATION_LIST_JSON_TRANSFORMER),
+        headers=CiscoUmbrellaCloudSecurityv2.DESTINATION_LIST_HEADERS,
+        headerTransform=pascalToSpace,
+    )
+    expected_command_results = CommonServerPython.CommandResults(
+        outputs_prefix='.'.join([CiscoUmbrellaCloudSecurityv2.INTEGRATION_OUTPUT_PREFIX, CiscoUmbrellaCloudSecurityv2.DESTINATION_LIST_OUTPUT_PREFIX]),
+        outputs_key_field=CiscoUmbrellaCloudSecurityv2.ID_OUTPUTS_KEY_FIELD,
+        outputs=None,
+        readable_output=expected_readable_output,
+        raw_response=raw_response,
+    )
+    assert command_results == expected_command_results
